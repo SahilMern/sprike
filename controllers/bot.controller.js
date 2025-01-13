@@ -1,5 +1,10 @@
+// const mainBot = require("../logic");
+const sellCode = require("../bot/sell");
+
 const startbot = async(req, res) => {
     try {
+
+        sellCode()
         return res.status(200).json({
             message:"Bot start data"
         })

@@ -3,7 +3,7 @@ const fetchBestBidPrice = require("./spike/bitmart");
 const sellCode = require("./spike/sellCode");
 
 // Price values from the APIs (initial prices)
-const data = async() =>{
+const mainBot = async() =>{
     const bitmartPrice = await fetchBestBidPrice();
     const dexPrice =await fetchParaswapPrice()
     
@@ -34,4 +34,4 @@ const data = async() =>{
 }
 
 
-data()
+module.exports = mainBot

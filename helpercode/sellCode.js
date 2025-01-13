@@ -84,7 +84,6 @@ async function sellTokens(amountToSell) {
     // Approve token transfer to Uniswap Router (if not already approved)
     const tokenContract = new ethers.Contract(tokenAddress, ["function approve(address spender, uint256 amount) public returns (bool)"], wallet);
     const routerContract = new ethers.Contract(routerAddress, UNISWAP_ROUTER_ABI, wallet);
-
     
     // Approve Uniswap Router to spend tokens
     const approveTx = await tokenContract.approve(routerAddress, amountToSell);
