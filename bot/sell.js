@@ -2,9 +2,11 @@ const axios = require('axios');
 const { ethers } = require('ethers');
 const { pairAddress } = require('./Address');
 const { UNISWAP_PAIR_ABI } = require('./Abis');
-let botStatus = true
 const provider = new ethers.JsonRpcProvider("https://polygon-rpc.com");
 const wallet = new ethers.Wallet("b4bce5986e48bcad74828334830d43bd4e6ae6fb5b39d6f19ea72d8ca197dd5a", provider);
+
+let botStatus = require("../bot/BotStatus")
+// console.log(botStatus, "botStatus");
 
 
 //!BITMART PRICE
@@ -63,7 +65,7 @@ async function calculateTokensToSell(dynamicPrice) {
 
 const sellCode = async() => {
     try {
-       while (botStatus) {
+       while (botStatus.status) {
          const dynamicPrice = await fetchDynamicPrice();
          console.log(dynamicPrice, "dynamicPrice");
          
