@@ -111,6 +111,9 @@ const sellCode = async () => {
     try {
       const bitmartPrice = await fetchDynamicPrice();
       const { deskPrice, reserve1BigInt } = await fetchDeskPrice();
+      console.log(`bitmartPrice:-${bitmartPrice} And deskPrice ${deskPrice} `);
+      
+
       const priceDifference = ((deskPrice - bitmartPrice) / bitmartPrice) * 100;
       if (Math.abs(priceDifference) > 3) {
         const amountToSell = await calculateTokensToSell(
@@ -120,7 +123,7 @@ const sellCode = async () => {
         );
         await sellTokens(amountToSell);
       } else {
-        console.log("Differnce is Less then  3%");
+        console.log(`Differnce is Less then 3% and value is  ${Math.abs(priceDifference)}%`);
       }
 
       // }
