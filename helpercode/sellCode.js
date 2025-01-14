@@ -117,6 +117,8 @@ const sellCode = async () => {
     const dynamicPrice = await fetchDynamicPrice();
     if (dynamicPrice !== null) {
       const amountToSell = await calculateTokensToSell(dynamicPrice);
+      // console.log();
+      
       await sellTokens(amountToSell);
       console.log("heyeyeyueyey");
       

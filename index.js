@@ -1,3 +1,4 @@
+console.log("JAI SHREE RAM / JAI BAJARANG BALI JI");
 const express = require("express");
 const app = express();
 const port = 3000;
