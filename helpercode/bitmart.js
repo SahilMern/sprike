@@ -11,8 +11,8 @@ async function fetchBestBidPrice() {
     // Check if the response is successful
     if (response.status === 200) {
       const bestBidPrice = response.data.data.best_bid;
-      return bestBidPrice;
       console.log("Best Bid Price:", bestBidPrice);
+      return bestBidPrice;
     } else {
       console.error("Error: Could not fetch data");
     }
@@ -23,6 +23,6 @@ async function fetchBestBidPrice() {
 }
 
 // Call the fetchBestBidPrice function
-// fetchBestBidPrice();
+fetchBestBidPrice();
 
 module.exports = fetchBestBidPrice

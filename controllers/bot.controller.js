@@ -6,8 +6,6 @@ const startbot = async (req, res) => {
   try {
     botStatus.status = true;
     sellCode();
-    // console.log(botStatus, "Maiajjaiai");
-
     return res.status(200).json({
       message: "Bot start data",
     });

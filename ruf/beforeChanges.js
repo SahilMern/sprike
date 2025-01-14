@@ -44,20 +44,29 @@ async function fetchReserves() {
 }
 
 //!How Much To Sell
-async function calculateTokensToSell(bitmartPrice, deskPrice, reserve1BigInt1) {
-  console.log(
-    bitmartPrice,
-    deskPrice,
-    reserve1BigInt1,
-    "bitmartPrice, deskPrice,reserve1BigInt"
-  );
+async function calculateTokensToSell(dynamicPrice) {
+  const { reserve0, reserve1 } = await fetchReserves();
+  console.log("Reserves:", reserve0, reserve1);
+  const reserve0BigInt = ethers.formatUnits(reserve0.toString(), 6); 
+  const reserve1BigInt = ethers.formatUnits(reserve1.toString(), 18);
+  console.log("Reserves (BigInt):", reserve0BigInt, reserve1BigInt);
 
-  // const reserve1BigInt = ethers.formatUnits(reserve1BigInt1.toString(), 18);
-  const amountToSell =
-    (reserve1BigInt1 * (deskPrice - bitmartPrice)) / deskPrice;
+  const currentPrice = reserve0BigInt / reserve1BigInt;
+  console.log("Current Uniswap Price:", currentPrice, dynamicPrice);
 
-  return ethers.parseEther(amountToSell.toString());
-  // return ethers.parseEther(amountToSell.toString());
+  const priceDifference = ((currentPrice - dynamicPrice) / dynamicPrice) * 100;
+  console.log(priceDifference, "priceDifference");
+
+  if (Math.abs(priceDifference) > 0.01) {
+    const amountToSell =
+      (reserve1BigInt * (currentPrice - dynamicPrice)) / currentPrice; // Simple proportional formula
+    console.log(ethers.parseEther(amountToSell.toString()), "hucwuwfejefjnfnfnfnnfnfnfnfnnfnfnfnfnfnfnfnfnfnfnfnfnfnfnfn");
+    return ethers.parseEther(amountToSell.toString());
+    // return ethers.parseEther(amountToSell.toString());
+  } else {
+    console.log("No need to sell. Current price is below dynamic price.");
+    return 0;
+  }
 }
 
 async function sellTokens(amountToSell) {
@@ -106,60 +115,23 @@ async function sellTokens(amountToSell) {
   }
 }
 
-const fetchDeskPrice = async () => {
-  const { reserve0, reserve1 } = await fetchReserves();
-  console.log("Reserves:", reserve0, reserve1);
-
-  const reserve0BigInt = ethers.formatUnits(reserve0.toString(), 6); // Reserve of token0 (your token)
-  const reserve1BigInt = ethers.formatUnits(reserve1.toString(), 18);
-  console.log("Reserves (BigInt):", reserve0BigInt, reserve1BigInt);
-
-  const deskPrice = reserve0BigInt / reserve1BigInt;
-  // console.log("Current Uniswap Price:", currentPrice, dynamicPrice);
-
-  console.log(deskPrice, "Current Price");
-  return { deskPrice, reserve1BigInt };
-};
-
 const sellCode = async () => {
   try {
     while (botStatus.status) {
-      const bitmartPrice = await fetchDynamicPrice();
-      const { deskPrice, reserve1BigInt } = await fetchDeskPrice();
+      const dynamicPrice = await fetchDynamicPrice();
 
-      console.log(bitmartPrice, deskPrice, reserve1BigInt, "Both price");
-
-      const priceDifference = ((deskPrice - bitmartPrice) / bitmartPrice) * 100;
-      console.log(priceDifference, "priceDifference");
-
-      if (Math.abs(priceDifference) > 0.1) {
-        console.log("Differnce is More than 3%");
-
-        const amountToSell = await calculateTokensToSell(
-          bitmartPrice,
-          deskPrice,
-          reserve1BigInt
-        );
-        console.log(amountToSell, "Amiou6sell");
-      } else {
-        console.log("Differnce is Less then  3%");
+      if (dynamicPrice !== null) {
+        const amountToSell = await calculateTokensToSell(dynamicPrice);
+        console.log(amountToSell, "amountTosell");
+        // await sellTokens(amountToSell);
       }
-      // return true;
 
-      // process.exit()
-      // console.log(dynamicPrice, "dynamicPrice");
-
-      // if (dynamicPrice !== null) {
-      //   const amountToSell = await calculateTokensToSell(dynamicPrice);
-      //   console.log(amountToSell, "amountTosell");
-      //   await sellTokens(amountToSell);
-      // }
       await new Promise((resolve) => setTimeout(resolve, 8000));
-      console.log("-----------");
     }
   } catch (error) {
     console.log(error, "Errror In main");
   }
 };
 
-module.exports = sellCode;
+sellCode();
+// module.exports = sellCode;
