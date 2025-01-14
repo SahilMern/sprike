@@ -8,7 +8,7 @@ const wallet = new ethers.Wallet(
   provider
 );
 
-let botStatus = require("../bot/BotStatus");
+let botStatus = require("../../bot/BotStatus");
 // console.log(botStatus, "botStatus");
 
 //!BITMART PRICE
