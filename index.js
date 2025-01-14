@@ -1,4 +1,5 @@
 console.log("JAI SHREE RAM / JAI BAJARANG BALI JI");
+require("dotenv").config({})
 const express = require("express");
 const app = express();
 const port = 3000;
