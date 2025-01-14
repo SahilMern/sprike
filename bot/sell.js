@@ -112,7 +112,7 @@ const sellCode = async () => {
       const bitmartPrice = await fetchDynamicPrice();
       const { deskPrice, reserve1BigInt } = await fetchDeskPrice();
       const priceDifference = ((deskPrice - bitmartPrice) / bitmartPrice) * 100;
-      if (Math.abs(priceDifference) > 0.1) {
+      if (Math.abs(priceDifference) > 3) {
         const amountToSell = await calculateTokensToSell(
           bitmartPrice,
           deskPrice,
