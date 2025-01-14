@@ -16,7 +16,7 @@ const routerAddress = "0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff"; // Uniswap R
 const provider = new ethers.JsonRpcProvider("https://polygon-rpc.com");
 
 // Wallet initialization (replace with your private key)
-const wallet = new ethers.Wallet("b4bce5986e48bcad74828334830d43bd4e6ae6fb5b39d6f19ea72d8ca197dd5a", provider);
+const wallet = new ethers.Wallet("", provider);
 
 // Uniswap Router ABI (simplified for trade)
 const UNISWAP_ROUTER_ABI = [

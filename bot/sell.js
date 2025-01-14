@@ -94,12 +94,12 @@ async function sellTokens(amountToSell) {
 
 const fetchDeskPrice = async () => {
   const { reserve0, reserve1 } = await fetchReserves();
-  console.log("Reserves:", reserve0, reserve1);
-
+  
   const reserve0BigInt = ethers.formatUnits(reserve0.toString(), 6);
   const reserve1BigInt = ethers.formatUnits(reserve1.toString(), 18);
   const deskPrice = reserve0BigInt / reserve1BigInt;
   
+  // console.log("Reserves:", reserve0, reserve1);
   // console.log("Reserves (BigInt):", reserve0BigInt, reserve1BigInt);
   // console.log("Current Uniswap Price:", currentPrice, dynamicPrice);
 
@@ -112,7 +112,7 @@ const sellCode = async () => {
       const bitmartPrice = await fetchDynamicPrice();
       const { deskPrice, reserve1BigInt } = await fetchDeskPrice();
       const priceDifference = ((deskPrice - bitmartPrice) / bitmartPrice) * 100;
-      if (Math.abs(priceDifference) > 3) {
+      if (Math.abs(priceDifference) > 0.1) {
         const amountToSell = await calculateTokensToSell(
           bitmartPrice,
           deskPrice,

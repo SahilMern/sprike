@@ -1,4 +1,3 @@
-// const mainBot = require("../logic");
 const sellCode = require("../bot/sell");
 let botStatus = require("../bot/BotStatus");
 
@@ -26,7 +25,6 @@ const stopbot = async (req, res) => {
 
 const statusBot = async (req, res) => {
   try {
-    botStatus;
     return res.status(200).json({
       message: "Bot Status",
       botStatus,
