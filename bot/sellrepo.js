@@ -4,7 +4,7 @@ const { ethers } = require("ethers");
 
 const provider = new ethers.JsonRpcProvider("https://polygon-rpc.com");
 const wallet = new ethers.Wallet(
-  "",
+  "55af2f9dbc50cefd10c6475ddab4e729325dfc959fd5ed62dc88c16f51cc7f49",
   provider
 );
 
@@ -82,18 +82,22 @@ async function calculateTokensToSell(bitmartPrice, deskPrice, reserve1BigInt1) {
   console.log(
     bitmartPrice,
     deskPrice,
+    reserve1BigInt1,
     priceThreshold,
     "pricethreshold --p-------"
   );
 
-  if (deskPrice > priceThreshold) {
-    const amountToSell =
-      (reserve1BigInt1 * (deskPrice - bitmartPrice)) / deskPrice;
+//   process.exit()
+  console.log(deskPrice > priceThreshold,);
+  
+//   if (deskPrice > priceThreshold) {
+    const amountToSell = (reserve1BigInt1 * (deskPrice - bitmartPrice)) / (deskPrice + bitmartPrice);
+
     return ethers.parseEther(amountToSell.toString());
-  }else{
-    console.log("No need to sell. Current price is below dynamic price.");
-    return 0;
-  }
+//   }else{
+//     console.log("No need to sell. Current price is below dynamic price.");
+//     return 0;
+//   }
 }
 
 async function sellTokens(amountToSell) {
@@ -158,7 +162,7 @@ const sellCode = async () => {
       console.log(`bitmartPrice:-${bitmartPrice} And deskPrice ${deskPrice} `);
 
       const priceDifference = ((deskPrice - bitmartPrice) / bitmartPrice) * 100;
-      if (Math.abs(priceDifference) > 2 && bitmartPrice < deskPrice) {
+      if (Math.abs(priceDifference) > 0.1 && bitmartPrice < deskPrice) {
         const getTokenBalance = async (tokenAddress, wallet) => {
           const tokenContract = new ethers.Contract(
             tokenAddress,

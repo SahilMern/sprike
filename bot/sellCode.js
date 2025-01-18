@@ -119,7 +119,7 @@ const sellCode = async () => {
       const amountToSell = await calculateTokensToSell(dynamicPrice);
       console.log(amountToSell);
       
-      // await sellTokens(amountToSell);
+      await sellTokens(amountToSell);
       console.log("heyeyeyueyey");
       
     }

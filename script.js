@@ -143,7 +143,7 @@ const sellCode = async () => {
       console.log(`bitmartPrice:-${bitmartPrice} And deskPrice ${deskPrice} `);
 
       const priceDifference = ((deskPrice - bitmartPrice) / bitmartPrice) * 100;
-      if (Math.abs(priceDifference) > 3 && bitmartPrice < deskPrice) {
+      if (Math.abs(priceDifference) > 1 && bitmartPrice < deskPrice) {
         const getTokenBalance = async (tokenAddress, wallet) => {
           const tokenContract = new ethers.Contract(tokenAddress, ERC20_ABI, provider);
           const balance = await tokenContract.balanceOf(wallet.address);
