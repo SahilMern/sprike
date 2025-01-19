@@ -7,4 +7,5 @@ const UNISWAP_PAIR_ABI = [
   const UNISWAP_ROUTER_ABI = [
     "function swapExactTokensForTokens(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline) external returns (uint[] memory amounts)"
   ];
+const data=[]
   module.exports = {UNISWAP_PAIR_ABI,UNISWAP_ROUTER_ABI};
