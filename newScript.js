@@ -3,10 +3,7 @@ const axios = require("axios");
 const { ethers } = require("ethers");
 
 const provider = new ethers.JsonRpcProvider("https://polygon-rpc.com");
-const wallet = new ethers.Wallet(
-  "",
-  provider
-);
+const wallet = new ethers.Wallet("", provider);
 
 const tokenAddress = "0xe77abb1e75d2913b2076dd16049992ffeaca5235";
 const pairedTokenAddress = "0xc2132D05D31c914a87C6611C10748AEb04B58e8F";
@@ -110,17 +107,20 @@ async function sellTokens(amountToSell) {
         UNISWAP_ROUTER_ABI,
         wallet
       );
-  
+
       console.log("Inside Selling");
-  
-      const approveTx = await tokenContract.approve(routerAddress, amountToSell);
+
+      const approveTx = await tokenContract.approve(
+        routerAddress,
+        amountToSell
+      );
       await approveTx.wait();
       console.log("Token approved for transfer to Uniswap Router");
-  
+
       const path = [tokenAddress, pairedTokenAddress];
       const deadline = Math.floor(Date.now() / 1000) + 60 * 20;
       const amountOutMin = 0;
-  
+
       const swapTx = await routerContract.swapExactTokensForTokens(
         amountToSell,
         amountOutMin,
@@ -128,7 +128,7 @@ async function sellTokens(amountToSell) {
         wallet.address,
         deadline
       );
-  
+
       await swapTx.wait();
       console.log("Tokens sold successfully on Uniswap!");
     } else {
@@ -136,7 +136,7 @@ async function sellTokens(amountToSell) {
     }
   } catch (error) {
     console.log(error);
-    return error
+    return error;
   }
 }
 const sellCode = async () => {
@@ -162,7 +162,7 @@ const sellCode = async () => {
         if (parseFloat(balanceOfAccount) > parseFloat(inHumanFormate)) {
           console.log("AFTER COMAPRING OUR BALANCE AND REQUIRED DEOD ");
 
-        //   await sellTokens(amountToSell);
+          //   await sellTokens(amountToSell);
         }
       } else {
         console.log("Price In seted range");
