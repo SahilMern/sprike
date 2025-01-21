@@ -2,6 +2,8 @@ const dotenv = require("dotenv").config({});
 const axios = require("axios");
 const { ethers } = require("ethers");
 const botStatus = require("./BotStatus");
+
+
 const deodprice = require("../models/setPrice.model");
 let colors = require("colors");
 
