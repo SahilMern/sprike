@@ -4,8 +4,6 @@ const deodprice = require("../models/setPrice.model");
 
 const startbot = async (req, res) => {
   try {
-    console.log("called");
-    
     botStatus.status = true;
     sellCode();
     return res.status(200).json({
@@ -68,7 +66,6 @@ const getPrices = async (req, res) => {
     const prices = await deodprice.find().sort({ createdAt: -1 }).limit(1); // Limit to 1 for the latest entry
 
     if (!prices || prices.length === 0) {
-      // Default response if no data is found
       return res.status(200).json({
         data: {
           sethighdeod: null, // Default high price
