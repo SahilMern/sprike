@@ -1,20 +1,27 @@
 console.log("JAI SHREE RAM / JAI BAJARANG BALI JI");
 
-require("dotenv").config();  
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const port = 3000;
 
 app.use(express.json());
 
-const databaseConnection = require("./config/connection"); 
+const databaseConnection = require("./config/connection");
 databaseConnection();
 
 const cors = require("cors");
 
-app.use(cors({
-    origin: "https://spikeui.vercel.app/"  
-}));
+
+app.use(
+    cors({
+      origin: [
+        "https://spikeui.vercel.app/",  // Production domain
+        "http://localhost:3000/",       // Local development for your Express API
+        "http://localhost:5173",        // Local development for your frontend
+      ],
+    })
+  );
 
 // User Routes
 const userRoutes = require("./routes/user.routes");
