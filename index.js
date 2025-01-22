@@ -16,7 +16,7 @@ const cors = require("cors");
 app.use(
     cors({
       origin: [
-        "https://spikeui.vercel.app/",  // Production domain
+        "https://spikeui.vercel.app",  // Production domain
         "http://localhost:3000/",       // Local development for your Express API
         "http://localhost:5173",        // Local development for your frontend
       ],

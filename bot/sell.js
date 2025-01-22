@@ -145,20 +145,22 @@ const sellCode = async () => {
   while (botStatus.status) {
     try {
       const prices = await deodprice.find().sort({ createdAt: -1 }).limit(1);
+      let  { deskPrice, reserve1BigInt } = await fetchDeskPrice();
       let setDeodHighPrice = prices[0].sethighdeod;
-      let setDeodLowPrice = prices[0].setlowdeodprice;
-      const { deskPrice, reserve1BigInt } = await fetchDeskPrice();
+      let setDeodLowPrice = parseFloat((deskPrice).toFixed(6));
 
-      console.log(
-        deskPrice > setDeodHighPrice,
-        deskPrice,
-        typeof deskPrice,
-        setDeodHighPrice,
-        typeof setDeodHighPrice
-      );
+      console.log(deskPrice, setDeodHighPrice,setDeodLowPrice, "comparing");
+      
+      // console.log(
+      //   deskPrice > setDeodHighPrice,
+      //   deskPrice,
+      //   typeof deskPrice,
+      //   setDeodHighPrice,
+      //   typeof setDeodHighPrice
+      // );
 
       if (deskPrice > setDeodHighPrice) {
-        console.log("Price Is Higher than");
+        console.log("PRICE IN RANGE");
 
         const balanceOfAccount = await getTokenBalance(tokenAddress, wallet);
         console.log(balanceOfAccount, "My Balance".bgRed);
@@ -174,7 +176,6 @@ const sellCode = async () => {
 
         if (parseFloat(balanceOfAccount) > parseFloat(inHumanFormate)) {
           console.log("AFTER COMAPRING OUR BALANCE AND REQUIRED DEOD ");
-
           await sellTokens(amountToSell);
         }
       } else {
