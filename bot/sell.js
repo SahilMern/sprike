@@ -3,11 +3,12 @@ const axios = require("axios");
 const { ethers } = require("ethers");
 const botStatus = require("./BotStatus");
 
-
 const deodprice = require("../models/setPrice.model");
 let colors = require("colors");
 
 const provider = new ethers.JsonRpcProvider("https://polygon-rpc.com");
+// const provider = new ethers.JsonRpcProvider("https://polygon-pokt.nodies.app");
+
 const wallet = new ethers.Wallet(process.env.private_key, provider);
 
 const tokenAddress = "0xe77abb1e75d2913b2076dd16049992ffeaca5235";
@@ -94,6 +95,7 @@ async function calculateTokensToSell(
 }
 
 async function sellTokens(amountToSell) {
+  console.log(amountToSell, "Acutal value in deod sell");
   try {
     if (amountToSell > 0) {
       const tokenContract = new ethers.Contract(
@@ -133,7 +135,7 @@ async function sellTokens(amountToSell) {
       await swapTx.wait();
       console.log("Tokens sold successfully on Uniswap!");
     } else {
-      console.log("No tokens to sell.");
+      console.log("No Deod To Sell 🥲");
     }
   } catch (error) {
     console.log(error);
@@ -141,16 +143,23 @@ async function sellTokens(amountToSell) {
   }
 }
 
+
 const sellCode = async () => {
   while (botStatus.status) {
     try {
       const prices = await deodprice.find().sort({ createdAt: -1 }).limit(1);
-      let  { deskPrice, reserve1BigInt } = await fetchDeskPrice();
+      let { deskPrice, reserve1BigInt } = await fetchDeskPrice();
       let setDeodHighPrice = prices[0].sethighdeod;
-      let setDeodLowPrice = parseFloat((deskPrice).toFixed(6));
-
-      console.log(deskPrice, setDeodHighPrice,setDeodLowPrice, "comparing");
+      let setDeodLowPrice = parseFloat(deskPrice.toFixed(6));
       
+      // 0.002914653919208312
+      // deskPrice = 0.002913;
+      // setDeodHighPrice = 0.002912;
+      // setDeodLowPrice = 0.00269;
+
+
+      console.log(deskPrice, setDeodHighPrice, setDeodLowPrice, "comparing");
+
       // console.log(
       //   deskPrice > setDeodHighPrice,
       //   deskPrice,
@@ -160,26 +169,41 @@ const sellCode = async () => {
       // );
 
       if (deskPrice > setDeodHighPrice) {
-        console.log("PRICE IN RANGE");
+        console.log("PRICE Braek The  RANGE ".bgRed);
 
         const balanceOfAccount = await getTokenBalance(tokenAddress, wallet);
-        console.log(balanceOfAccount, "My Balance".bgRed);
+        console.log(balanceOfAccount, "My Balance ------".bgRed);
 
         const amountToSell = await calculateTokensToSell(
-          setDeodLowPrice,
+          setDeodHighPrice,
           deskPrice,
           reserve1BigInt
         );
         // console.log(amountToSell, "amountToSell ----");
         const inHumanFormate = ethers.formatUnits(amountToSell, 18);
-        console.log(inHumanFormate, "inHumanFormate");
+        console.log(inHumanFormate, "Value In Human Formate");
 
-        if (parseFloat(balanceOfAccount) > parseFloat(inHumanFormate)) {
-          console.log("AFTER COMAPRING OUR BALANCE AND REQUIRED DEOD ");
-          await sellTokens(amountToSell);
-        }
+        // if (parseFloat(balanceOfAccount) > parseFloat(inHumanFormate)) {
+        //   console.log("AFTER COMAPRING OUR BALANCE AND REQUIRED DEOD ");
+        //   if (inHumanFormate > balanceOfAccount) {
+        //     console.log("balance is high");
+        //     await sellTokens(balanceOfAccount);
+        //   }
+        //   // await sellTokens(amountToSell);
+        // }
+       
+        
+           if (parseFloat(inHumanFormate) > parseFloat(balanceOfAccount)) {
+            console.log("Balance is low compare to selling");
+            const data = ethers.parseUnits(balanceOfAccount.toString(),18); 
+            await sellTokens(data);
+          }else{
+            console.log("Balance is High and Selling amount is low ")
+            await sellTokens(amountToSell);
+          }
+
       } else {
-        console.log("Price In seted range");
+        console.log("Price Is In range");
       }
 
       await new Promise((resolve) => setTimeout(resolve, 12000));
